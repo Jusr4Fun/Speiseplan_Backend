@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\WocheController;
 use App\Http\Controllers\WochenBestellungController;
+use App\Http\Controllers\AbteilungController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,12 @@ Route::controller(WocheController::class)->group(function() {
 
 Route::controller(WochenBestellungController::class)->group(function() {
     Route::get('/wochenBestellungen', 'index');
+});
+
+Route::controller(AbteilungController::class)->group(function() {
+    Route::get('/abteilungen', 'index');
+
+    Route::post('/abteilung','store');
+
+    Route::get('/abteilung={id}','show');
 });
