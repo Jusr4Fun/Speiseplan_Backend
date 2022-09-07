@@ -20,4 +20,8 @@ class Woche extends Model
 
     protected $table = 'wochen';
     public $timestamps = false;
+
+    public function wochenBestellungen() {
+        return $this->hasMany(WochenBestellung::class, 'wochen_id');
+    }
 }

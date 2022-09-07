@@ -87,4 +87,19 @@ class WochenBestellungController extends Controller
     {
         //
     }
+
+    /**
+     * Übergibt alle Wochenbestellungen der spezifizierten ID
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function returnSpezialEssen($id) {
+        $data = WochenBestellung::find($id)->spezialEssen()->get();
+
+        return response()->json([
+            'data' => $data,
+            'message' => 'Spezialessen der Wochenbestellung erfolgreich geladen',
+            'succes' => true,
+        ],200);
+    }
 }

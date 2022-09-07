@@ -8,4 +8,29 @@ use Illuminate\Database\Eloquent\Model;
 class Spezial_Essen extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'essen_id',
+        'teilnehmer_id',
+        'wochen_bestellung_id',
+        'wochentag_id',
+    ];
+
+    protected $table = 'spezial_essen';
+    public $timestamps = false;
+
+    public function essen()
+    {
+        return $this->belongsTo(Essen::class, 'essen_id');
+    }
+
+    public function teilnehmer()
+    {
+        return $this->belongsTo(Teilnehmer::class, 'teilnehmer_id');
+    }
 }

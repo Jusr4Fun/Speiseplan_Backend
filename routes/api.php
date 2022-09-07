@@ -40,10 +40,16 @@ Route::controller(WocheController::class)->group(function() {
     Route::post('/wochen','store');
 
     Route::get('/woche={id}','show');
+
+    Route::get('/wochen={id}=Bestellungen', 'returnWochenBestellungen');
+
+    Route::get('/wochen={id}=SpezialEssen', 'returnSpezialEssen');
 });
 
 Route::controller(WochenBestellungController::class)->group(function() {
     Route::get('/wochenBestellungen', 'index');
+
+    Route::get('/wochenBestellungen={id}=SpezialEssen', 'returnSpezialEssen');
 });
 
 Route::controller(AbteilungController::class)->group(function() {

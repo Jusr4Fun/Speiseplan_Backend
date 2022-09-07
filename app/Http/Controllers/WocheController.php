@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Woche;
 use Illuminate\Http\Request;
 
@@ -106,4 +107,90 @@ class WocheController extends Controller
     {
         //
     }
+
+    /**
+     * Übergibt alle Wochenbestellungen der spezifizierten ID
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function returnWochenBestellungen($id) {
+        $data = Woche::where('id','=',$id)->with([                            
+            'wochenBestellungen'
+            ])->get()[0];
+
+        return response()->json([
+                'data' => $data,
+                'message' => 'Wochenbestellungen der Woche erfolgreich geladen',
+                'succes' => true,
+        ],200);
+    }
+    
+
+    public function returnSpezialEssen($id)
+    {
+        $data = Woche::where('id','=',$id)->with([                            
+            'wochenBestellungen.spezialEssen.teilnehmer'
+            ])->get()[0];
+        
+        $test = json_encode($data);
+        $test = json_decode($test);
+        $essenAnzahl = array(array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0));
+        foreach( $test->wochen_bestellungen as $wochen) {
+            foreach( $wochen->spezial_essen as $essen) {
+                $essenAnzahl[$essen->wochentag_id-1][$essen->essen_id-1]++;
+            }
+            $essenAnzahl[0][4] += $wochen->montag_normal ;
+            $essenAnzahl[1][4] += $wochen->dienstag_normal ; 
+            $essenAnzahl[2][4] += $wochen->mittwoch_normal ;
+            $essenAnzahl[3][4] += $wochen->donnerstag_normal ;
+            $essenAnzahl[4][4] += $wochen->freitag_normal ;
+        }
+        $test->Normal = [
+                            'Name' => 'Normal',
+                            'Montag' => $essenAnzahl[0][4], 
+                            'Dienstag' => $essenAnzahl[1][4], 
+                            'Mittwoch' => $essenAnzahl[2][4], 
+                            'Donnerstag' => $essenAnzahl[3][4], 
+                            'Freitag' => $essenAnzahl[4][4]
+        ];
+        $test->Vegetarisch = [
+                            'Name' => 'Vegetarisch',
+                            'Montag' => $essenAnzahl[0][0], 
+                            'Dienstag' => $essenAnzahl[1][0], 
+                            'Mittwoch' => $essenAnzahl[2][0], 
+                            'Donnerstag' => $essenAnzahl[3][0], 
+                            'Freitag' => $essenAnzahl[4][0]
+                        ];
+        $test->Vegan = [
+                            'Name' => 'Vegan',
+                            'Montag' => $essenAnzahl[0][1], 
+                            'Dienstag' => $essenAnzahl[1][1], 
+                            'Mittwoch' => $essenAnzahl[2][1], 
+                            'Donnerstag' => $essenAnzahl[3][1], 
+                            'Freitag' => $essenAnzahl[4][1]
+                        ];
+        $test->Glutenfrei = [
+                            'Name' => 'Glutenfrei',
+                            'Montag' => $essenAnzahl[0][2], 
+                            'Dienstag' => $essenAnzahl[1][2], 
+                            'Mittwoch' => $essenAnzahl[2][2], 
+                            'Donnerstag' => $essenAnzahl[3][2], 
+                            'Freitag' => $essenAnzahl[4][2]
+                        ];
+        $test->Lactosefrei = [
+                            'Name' => 'Lactosefrei',
+                            'Montag' => $essenAnzahl[0][3], 
+                            'Dienstag' => $essenAnzahl[1][3], 
+                            'Mittwoch' => $essenAnzahl[2][3], 
+                            'Donnerstag' => $essenAnzahl[3][3], 
+                            'Freitag' => $essenAnzahl[4][3]
+                        ];
+
+        return response()->json([
+            'data' => $test,
+            'message' => 'Wochenbestellungen der Woche erfolgreich geladen',
+            'succes' => true,
+        ],200);
+    }
+
 }

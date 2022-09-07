@@ -27,4 +27,19 @@ class WochenBestellung extends Model
 
     protected $table = 'wochen_bestellung';
     public $timestamps = false;
+
+    public function woche()
+    {
+        return $this->belongsTo(Woche::class);
+    }
+
+    public function abteilung()
+    {
+        return $this->belongsTo(Abteilung::class);
+    }
+
+    public function spezialEssen()
+    {
+        return $this->hasMany(Spezial_Essen::class, 'wochen_bestellung_id');
+    }
 }
