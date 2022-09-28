@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Abteilung extends Model
+class Wochentag extends Model
 {
     use HasFactory;
-
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -16,13 +16,14 @@ class Abteilung extends Model
      */
     protected $fillable = [
         'name',
+
     ];
 
-    public function user() 
-    {
-        return $this->hasMany(User::class, 'abteilung_id');
-    }
-
-    protected $table = 'abteilungen';
+    protected $table = 'wochentag';
     public $timestamps = false;
+
+    public function spezialEssen()
+    {
+        return $this->hasMany(Spezial_Essen::class);
+    }
 }

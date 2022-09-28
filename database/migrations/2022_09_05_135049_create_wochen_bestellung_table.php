@@ -19,8 +19,6 @@ return new class extends Migration
             $table->foreign('wochen_id')->references('id')->on('wochen');
             $table->BigInteger('abteilung_id')->unsigned(); 
             $table->foreign('abteilung_id')->references('id')->on('abteilungen'); 
-            $table->BigInteger('massen_bestellung_id')->unsigned(); 
-            $table->foreign('massen_bestellung_id')->references('id')->on('massen_bestellung'); 
             $table->integer('anzahl_essen_normal');
             $table->integer('montag_normal'); 
             $table->integer('dienstag_normal'); 

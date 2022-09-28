@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WocheController;
 use App\Http\Controllers\WochenBestellungController;
 use App\Http\Controllers\AbteilungController;
@@ -22,7 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(UsersController::class)->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/users/auth', AuthController::class);
+});
+
+Route::middleware(['auth:sanctum'])->controller(UsersController::class)->group(function () {
     Route::get('/users','index');
 
     Route::get('/user={id}','show');
@@ -34,7 +39,7 @@ Route::controller(UsersController::class)->group(function () {
     Route::post('/updateUser','update');
 });
 
-Route::controller(WocheController::class)->group(function() {
+Route::middleware(['auth:sanctum'])->controller(WocheController::class)->group(function() {
     Route::get('/wochen', 'index');
 
     Route::post('/wochen','store');
@@ -46,13 +51,13 @@ Route::controller(WocheController::class)->group(function() {
     Route::get('/wochen={id}=SpezialEssen', 'returnSpezialEssen');
 });
 
-Route::controller(WochenBestellungController::class)->group(function() {
+Route::middleware(['auth:sanctum'])->controller(WochenBestellungController::class)->group(function() {
     Route::get('/wochenBestellungen', 'index');
 
     Route::get('/wochenBestellungen={id}=SpezialEssen', 'returnSpezialEssen');
 });
 
-Route::controller(AbteilungController::class)->group(function() {
+Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->group(function() {
     Route::get('/abteilungen', 'index');
 
     Route::post('/abteilung','store');

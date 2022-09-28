@@ -33,4 +33,14 @@ class Spezial_Essen extends Model
     {
         return $this->belongsTo(Teilnehmer::class, 'teilnehmer_id');
     }
+
+    public function wochentag()
+    {
+        return $this->belongsTo(Wochentag::class, 'wochentag_id');
+    }
+
+    public function wochen_bestellung()
+    {
+        return $this->belongsTo(WochenBestellung::class, 'wochen_bestellung_id');
+    }
 }

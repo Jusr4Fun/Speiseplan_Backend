@@ -134,9 +134,11 @@ class WocheController extends Controller
         
         $test = json_encode($data);
         $test = json_decode($test);
+        $spezialEssenArray = [];
         $essenAnzahl = array(array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0));
         foreach( $test->wochen_bestellungen as $wochen) {
             foreach( $wochen->spezial_essen as $essen) {
+                $spezialEssenArray[] = $essen;
                 $essenAnzahl[$essen->wochentag_id-1][$essen->essen_id-1]++;
             }
             $essenAnzahl[0][4] += $wochen->montag_normal ;
@@ -185,6 +187,7 @@ class WocheController extends Controller
                             'Donnerstag' => $essenAnzahl[3][3], 
                             'Freitag' => $essenAnzahl[4][3]
                         ];
+        $test->indívi = $spezialEssenArray;
 
         return response()->json([
             'data' => $test,

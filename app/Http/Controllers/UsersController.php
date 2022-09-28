@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -15,9 +16,17 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $user=User::get();
+        $user=User::with([                            
+            'abteilung'
+            ])->get();
+        $test = json_encode($user);
+        $test = json_decode($test);
+        foreach( $test as $data) {
+            $data->abteilung = $data->abteilung->name;
+        }
+        //$user=User::get();
         return response()->json([
-            'data' => $user,
+            'data' => $test,
             'message' => 'Nutzerindex erfolgreich geladen',
             'succes' => true,
         ],200);
@@ -43,14 +52,14 @@ class UsersController extends Controller
     {
         $fields = $request->validate([
             'name' => 'required|string|min:2|max:20',
-            'abteilung' => 'required|string|min:2|max:99',
+            'abteilung_id' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:10|max:20',
         ]);
 
         $data = [
             'name' => $fields['name'],
-            'abteilung' => $fields['abteilung'],
+            'abteilung_id' => $fields['abteilung_id'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password']),
         ];
@@ -103,13 +112,17 @@ class UsersController extends Controller
         $fields = $request->validate([
             'id' => 'required',
             'name' => 'required|string|min:2|max:99',
-            'abteilung' => 'required|string|min:2|max:99',
+            'abteilung_id' => 'required',
             'email' => 'required|email|unique:users,email,'.$request->id,
+            'password' => 'sometimes|string|min:8|max:99'
         ]);
-        
         $user = User::find($fields['id']);
+        if (array_key_exists('password', $fields))
+        {
+            $user->password = bcrypt($fields['password']);
+        }
         $user->name = $fields['name'];
-        $user->abteilung = $fields['abteilung'];
+        $user->abteilung_id = $fields['abteilung_id'];
         $user->email = $fields['email'];
         $user->save();
         
