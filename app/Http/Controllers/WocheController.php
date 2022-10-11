@@ -129,7 +129,9 @@ class WocheController extends Controller
     public function returnSpezialEssen($id)
     {
         $data = Woche::where('id','=',$id)->with([                            
-            'wochenBestellungen.spezialEssen.teilnehmer'
+            'wochenBestellungen.spezialEssen.teilnehmer',
+            'wochenBestellungen.spezialEssen.wochentag',
+            'wochenBestellungen.spezialEssen.essen'
             ])->get()[0];
         
         $test = json_encode($data);
@@ -138,7 +140,28 @@ class WocheController extends Controller
         $essenAnzahl = array(array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0));
         foreach( $test->wochen_bestellungen as $wochen) {
             foreach( $wochen->spezial_essen as $essen) {
-                $spezialEssenArray[] = $essen;
+                if ( $this->istTvohanden($spezialEssenArray, $essen)) {
+                foreach( $spezialEssenArray as $teilnehmer) {
+                        if ( $teilnehmer->Teilnehmer_id == $essen->teilnehmer_id) {
+                            $temp = $essen->wochentag->name;
+                            $teilnehmer->$temp = $essen->essen->bezeichnung;
+                        }
+                    }
+                }
+                else {
+                    $tempobj = new \stdClass();
+                    $tempobj->Name = $essen->teilnehmer->name;
+                    $tempobj->Montag = ''; 
+                    $tempobj->Dienstag = ''; 
+                    $tempobj->Mittwoch = ''; 
+                    $tempobj->Donnerstag = ''; 
+                    $tempobj->Freitag = '';
+                    $tempobj->Teilnehmer_id = $essen->teilnehmer->id;
+                    $temp = $essen->wochentag->name;
+                    //$tempobj->essen[$essen->wochentag->name] = $essen->essen->bezeichnung;
+                    $tempobj->$temp = $essen->essen->bezeichnung;
+                    $spezialEssenArray[] = $tempobj;
+                }
                 $essenAnzahl[$essen->wochentag_id-1][$essen->essen_id-1]++;
             }
             $essenAnzahl[0][4] += $wochen->montag_normal ;
@@ -179,21 +202,36 @@ class WocheController extends Controller
                             'Donnerstag' => $essenAnzahl[3][2], 
                             'Freitag' => $essenAnzahl[4][2]
                         ];
-        $test->Lactosefrei = [
-                            'Name' => 'Lactosefrei',
+        $test->Laktosefrei = [
+                            'Name' => 'Laktosefrei',
                             'Montag' => $essenAnzahl[0][3], 
                             'Dienstag' => $essenAnzahl[1][3], 
                             'Mittwoch' => $essenAnzahl[2][3], 
                             'Donnerstag' => $essenAnzahl[3][3], 
                             'Freitag' => $essenAnzahl[4][3]
                         ];
-        $test->indívi = $spezialEssenArray;
+
+        foreach($spezialEssenArray as $teilnehmer) {
+            $temp = $teilnehmer;
+
+        }
+        $test->teilnehmer = $spezialEssenArray;
 
         return response()->json([
             'data' => $test,
             'message' => 'Wochenbestellungen der Woche erfolgreich geladen',
             'succes' => true,
         ],200);
+    }
+
+    private function istTvohanden($spezial, $essen) {
+        $returnValue = false;
+        foreach( $spezial as $teilnehmer) {
+                if ( $teilnehmer->Teilnehmer_id == $essen->teilnehmer_id) {
+                    $returnValue = true;
+                }
+            }
+        return $returnValue;
     }
 
 }

@@ -23,6 +23,29 @@ class AbteilungController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexExpanded($id)
+    {
+        $data = Abteilung::where('id','=',$id)->with([                            
+            'teilnehmer'
+            ])->get()[0];
+        $name = $data->name;
+        $abteilungTeilnehmer = $data->teilnehmer;
+
+        foreach( $abteilungTeilnehmer as $teilnehmer) {
+            $teilnehmer->abteilung = $name;
+        }
+        return response()->json([
+            'data' => $abteilungTeilnehmer,
+            'message' => 'Alle Teilnehmer der Abteilung erfolgreich übergeben',
+            'succes' => true,
+        ],200);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

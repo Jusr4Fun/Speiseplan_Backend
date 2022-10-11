@@ -63,4 +63,6 @@ Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->gro
     Route::post('/abteilung','store');
 
     Route::get('/abteilung={id}','show');
+
+    Route::get('/abteilungTeilnehmer={id}','indexExpanded');
 });

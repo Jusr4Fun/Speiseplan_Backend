@@ -23,6 +23,11 @@ class Abteilung extends Model
         return $this->hasMany(User::class, 'abteilung_id');
     }
 
+    public function teilnehmer() 
+    {
+        return $this->hasMany(Teilnehmer::class, 'abteilungs_id');
+    }
+
     protected $table = 'abteilungen';
     public $timestamps = false;
 }

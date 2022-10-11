@@ -20,4 +20,9 @@ class Teilnehmer extends Model
 
     protected $table = 'teilnehmer';
     public $timestamps = false;
+
+    public function abteilung()
+    {
+        return $this->belongsTo(Abteilung::class, 'abteilungs_id');
+    }
 }
