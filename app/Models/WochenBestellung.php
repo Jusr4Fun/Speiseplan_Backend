@@ -42,4 +42,9 @@ class WochenBestellung extends Model
     {
         return $this->hasMany(Spezial_Essen::class, 'wochen_bestellung_id');
     }
+
+    public function scopeWoche($query, $value)
+    {
+        return $query->where('wochen_id', $value);
+    }
 }

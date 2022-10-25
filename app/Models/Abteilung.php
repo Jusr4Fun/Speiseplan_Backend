@@ -28,6 +28,11 @@ class Abteilung extends Model
         return $this->hasMany(Teilnehmer::class, 'abteilungs_id');
     }
 
+    public function scopeWocheBestellungen() 
+    {
+        return $this->hasMany(WochenBestellung::class, 'abteilung_id');
+    }
+
     protected $table = 'abteilungen';
     public $timestamps = false;
 }
