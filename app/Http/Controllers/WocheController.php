@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use App\Models\Woche;
 use Illuminate\Http\Request;
+use \Datetime;
+use \DatetimeZone;
 
 class WocheController extends Controller
 {
@@ -30,7 +32,6 @@ class WocheController extends Controller
      */
     public function create()
     {
-        $woche = Woche::create([]);
     }
 
     /**
@@ -220,6 +221,52 @@ class WocheController extends Controller
         return response()->json([
             'data' => $test,
             'message' => 'Wochenbestellungen der Woche erfolgreich geladen',
+            'succes' => true,
+        ],200);
+    }
+
+    public function returnAktuelleWoche(Request $request) {
+
+        $fields = $request->validate([
+            'time' => 'required|int|min:1',
+            'offset' => 'required|int',
+        ]);
+        
+        $timezoneOffset = $fields['offset'];
+        $time = $fields['time'];
+        $time = $time /1000 - $timezoneOffset *60;
+        //$time = $time + (3600*24*7);
+
+        $date = date("Y-m-d H:i:s", $time);
+        $temp = 'KW ' . date("W o", $time);
+        $data = Woche::where('name','=',$temp)->get()[0];
+
+        return response()->json([
+            'data' => $data,
+            'message' => 'Aktuelle Woche erfolgreich geladen',
+            'succes' => true,
+        ],200);
+    }
+
+    public function returnNaechsteWoche(Request $request) {
+
+        $fields = $request->validate([
+            'time' => 'required|int|min:1',
+            'offset' => 'required|int',
+        ]);
+        
+        $timezoneOffset = $fields['offset'];
+        $time = $fields['time'];
+        $time = $time /1000 - $timezoneOffset *60;
+        $time = $time + (3600*24*7);
+
+        $date = date("Y-m-d H:i:s", $time);
+        $temp = 'KW ' . date("W o", $time);
+        $data = Woche::where('name','=',$temp)->get()[0];
+
+        return response()->json([
+            'data' => $data,
+            'message' => 'Nächste Woche erfolgreich geladen',
             'succes' => true,
         ],200);
     }

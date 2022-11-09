@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WocheController;
 use App\Http\Controllers\WochenBestellungController;
 use App\Http\Controllers\AbteilungController;
+use App\Http\Controllers\RolleController;
+use App\Http\Controllers\TeilnehmerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,11 +34,13 @@ Route::middleware(['auth:sanctum'])->controller(UsersController::class)->group(f
 
     Route::get('/user={id}','show');
 
-    Route::delete('/delete={id}','destroy');
+    Route::delete('/deleteUser={id}','destroy');
 
-    Route::post('/users','store');
+    Route::post('/storeUsers','store');
 
     Route::post('/updateUser','update');
+
+    Route::post('/updatePasswort' , 'updatePasswort');
 });
 
 Route::middleware(['auth:sanctum'])->controller(WocheController::class)->group(function() {
@@ -49,6 +53,10 @@ Route::middleware(['auth:sanctum'])->controller(WocheController::class)->group(f
     Route::get('/wochen={id}=Bestellungen', 'returnWochenBestellungen');
 
     Route::get('/wochen={id}=SpezialEssen', 'returnSpezialEssen');
+
+    Route::post('/aktuelleWoche', 'returnAktuelleWoche');
+
+    Route::post('/naechsteWoche', 'returnNaechsteWoche');
 });
 
 Route::middleware(['auth:sanctum'])->controller(WochenBestellungController::class)->group(function() {
@@ -69,4 +77,16 @@ Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->gro
     Route::get('/abteilungTeilnehmer={id}','indexExpanded');
 
     Route::get('/abteilungTeilnehmerName={id}','returnTeilnehmerName');
+});
+
+Route::middleware(['auth:sanctum'])->controller(RolleController::class)->group(function () {
+    Route::get('/RolleRoleID','returnRollenRoleID');
+});
+
+Route::middleware(['auth:sanctum'])->controller(TeilnehmerController::class)->group(function () {
+    Route::delete('/deleteTeilnehmer={id}','destroy');
+
+    Route::post('/updateTeilnehmer','update');
+
+    Route::post('/storeTeilnehmer','store');
 });

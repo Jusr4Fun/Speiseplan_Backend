@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Teilnehmer extends Model
+class Rolle extends Model
 {
     use HasFactory;
 
@@ -16,14 +16,14 @@ class Teilnehmer extends Model
      */
     protected $fillable = [
         'name',
-        'abteilungs_id'
+        'role_code',
     ];
 
-    protected $table = 'teilnehmer';
+    protected $table = 'rollen';
     public $timestamps = false;
 
-    public function abteilung()
+    public function user() 
     {
-        return $this->belongsTo(Abteilung::class, 'abteilungs_id');
+        return $this->hasMany(User::class, 'role_id');
     }
 }

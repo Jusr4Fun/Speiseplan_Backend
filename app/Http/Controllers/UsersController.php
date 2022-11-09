@@ -17,12 +17,16 @@ class UsersController extends Controller
     public function index()
     {
         $user=User::with([                            
-            'abteilung'
+            'abteilung',
+            'rollen'
             ])->get();
         $test = json_encode($user);
         $test = json_decode($test);
         foreach( $test as $data) {
             $data->abteilung = $data->abteilung->name;
+            $data->role = $data->rollen->name;
+            $data->role_id = $data->rollen->id;
+            unset($data->rollen);
         }
         //$user=User::get();
         return response()->json([
@@ -53,6 +57,7 @@ class UsersController extends Controller
         $fields = $request->validate([
             'name' => 'required|string|min:2|max:20',
             'abteilung_id' => 'required',
+            'role_id' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:10|max:20',
         ]);
@@ -62,6 +67,7 @@ class UsersController extends Controller
             'abteilung_id' => $fields['abteilung_id'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password']),
+            'role_id' => $fields['role_id'],
         ];
 
         $user = User::create($data);
@@ -113,17 +119,14 @@ class UsersController extends Controller
             'id' => 'required',
             'name' => 'required|string|min:2|max:99',
             'abteilung_id' => 'required',
+            'role_id' => 'required',
             'email' => 'required|email|unique:users,email,'.$request->id,
-            'password' => 'sometimes|string|min:8|max:99'
         ]);
         $user = User::find($fields['id']);
-        if (array_key_exists('password', $fields))
-        {
-            $user->password = bcrypt($fields['password']);
-        }
         $user->name = $fields['name'];
         $user->abteilung_id = $fields['abteilung_id'];
         $user->email = $fields['email'];
+        $user->role_id = $fields['role_id'];
         $user->save();
         
         return response()->json([
@@ -143,6 +146,23 @@ class UsersController extends Controller
         User::destroy($id);
         return response()->json([
             'message' => 'Nutzer erfolgreich gelöscht',
+            'succes' => true,
+        ],200);
+    }
+
+    public function updatePasswort(Request $request) 
+    {
+        $fields = $request->validate([
+            'id' => 'required',
+            'password' => 'required|string|min:8|max:99'
+        ]);
+
+        $user = User::find($fields['id']);
+        $user->password = bcrypt($fields['password']);
+        $user->save();
+        
+        return response()->json([
+            'message' => 'Passwort erfolgreich aktualisiert',
             'succes' => true,
         ],200);
     }
