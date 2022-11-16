@@ -63,6 +63,8 @@ Route::middleware(['auth:sanctum'])->controller(WochenBestellungController::clas
     Route::get('/wochenBestellungen', 'index');
 
     Route::get('/wochenBestellungen={id}=SpezialEssen', 'returnSpezialEssen');
+
+    Route::post('/updateOrCreateWochenBestellung', 'updateOrCreateWochenBestellungSpezialBestellungen');
 });
 
 Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->group(function() {
