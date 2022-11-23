@@ -171,7 +171,8 @@ class WocheController extends Controller
             $essenAnzahl[3][4] += $wochen->donnerstag_normal ;
             $essenAnzahl[4][4] += $wochen->freitag_normal ;
         }
-        $test->Normal = [
+        $gesamtBestellungen = [];
+        $gesamtBestellungen[0] = [
                             'Name' => 'Normal',
                             'Montag' => $essenAnzahl[0][4], 
                             'Dienstag' => $essenAnzahl[1][4], 
@@ -179,7 +180,7 @@ class WocheController extends Controller
                             'Donnerstag' => $essenAnzahl[3][4], 
                             'Freitag' => $essenAnzahl[4][4]
         ];
-        $test->Vegetarisch = [
+        $gesamtBestellungen[1]  = [
                             'Name' => 'Vegetarisch',
                             'Montag' => $essenAnzahl[0][0], 
                             'Dienstag' => $essenAnzahl[1][0], 
@@ -187,7 +188,7 @@ class WocheController extends Controller
                             'Donnerstag' => $essenAnzahl[3][0], 
                             'Freitag' => $essenAnzahl[4][0]
                         ];
-        $test->Vegan = [
+        $gesamtBestellungen[2]  = [
                             'Name' => 'Vegan',
                             'Montag' => $essenAnzahl[0][1], 
                             'Dienstag' => $essenAnzahl[1][1], 
@@ -195,7 +196,7 @@ class WocheController extends Controller
                             'Donnerstag' => $essenAnzahl[3][1], 
                             'Freitag' => $essenAnzahl[4][1]
                         ];
-        $test->Glutenfrei = [
+        $gesamtBestellungen[3]  = [
                             'Name' => 'Glutenfrei',
                             'Montag' => $essenAnzahl[0][2], 
                             'Dienstag' => $essenAnzahl[1][2], 
@@ -203,7 +204,7 @@ class WocheController extends Controller
                             'Donnerstag' => $essenAnzahl[3][2], 
                             'Freitag' => $essenAnzahl[4][2]
                         ];
-        $test->Laktosefrei = [
+        $gesamtBestellungen[4]  = [
                             'Name' => 'Laktosefrei',
                             'Montag' => $essenAnzahl[0][3], 
                             'Dienstag' => $essenAnzahl[1][3], 
@@ -211,7 +212,7 @@ class WocheController extends Controller
                             'Donnerstag' => $essenAnzahl[3][3], 
                             'Freitag' => $essenAnzahl[4][3]
                         ];
-
+        $test->gesamtBestellungen = $gesamtBestellungen;
         foreach($spezialEssenArray as $teilnehmer) {
             $temp = $teilnehmer;
 
