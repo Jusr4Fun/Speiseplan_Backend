@@ -9,6 +9,7 @@ use App\Http\Controllers\WochenBestellungController;
 use App\Http\Controllers\AbteilungController;
 use App\Http\Controllers\RolleController;
 use App\Http\Controllers\TeilnehmerController;
+use App\Http\Controllers\SupportMailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,4 +92,8 @@ Route::middleware(['auth:sanctum'])->controller(TeilnehmerController::class)->gr
     Route::post('/updateTeilnehmer','update');
 
     Route::post('/storeTeilnehmer','store');
+});
+
+Route::controller(SupportMailController::class)->group(function () {
+    Route::post('/SupportMail','Support');
 });
