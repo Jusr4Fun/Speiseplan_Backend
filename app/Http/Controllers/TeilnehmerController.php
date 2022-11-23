@@ -92,11 +92,11 @@ class TeilnehmerController extends Controller
         $fields = $request->validate([
             'id' => 'required',
             'name' => 'required|string|min:2|max:99',
-            'abteilung_id' => 'required',
+            'abteilungs_id' => 'required',
         ]);
         $teilnehmer = Teilnehmer::find($fields['id']);
         $teilnehmer->name = $fields['name'];
-        $teilnehmer->abteilung_id = $fields['abteilung_id'];
+        $teilnehmer->abteilungs_id = $fields['abteilungs_id'];
         $teilnehmer->save();
         
         return response()->json([
