@@ -14,14 +14,25 @@ class SupportMailController extends Controller
             'details'  => 'required',
             'betreff'  => 'required',
             'email'    => 'required|email',
+            'user' => 'sometimes',
         ]);
-        $testMailData = [
-            'title' => 'Dies ist eine Support-Mail des Speiseplan Projektes',
-            'body' => $fields['details'],
-            'subject' => $fields['betreff']
-        ];
-
-        Mail::to($fields['email'])->send(new SendMail($testMailData));
+        
+        if(count($fields['user']) < 1) {
+            $testMailData = [
+                'title' => 'Dies ist eine Support-Mail des Speiseplan Projektes',
+                'body' => $fields['details'],
+                'subject' => $fields['betreff']
+            ];
+            Mail::to($fields['email'])->send(new SendMail($testMailData));
+        } else {
+            $testMailData = [
+                'title' => 'Dies ist eine Support-Mail des Speiseplan Projektes',
+                'body' => $fields['details'],
+                'user' => $fields['user']['name'],
+                'subject' => $fields['betreff']
+            ];
+            Mail::to($fields['email'])->send(new SendMail($testMailData));
+        }
     }
 
     public function SupportAuth()
