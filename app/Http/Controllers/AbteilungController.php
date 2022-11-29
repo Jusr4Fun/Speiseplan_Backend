@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Abteilung;
+use App\Models\WochenBestellung;
 use Illuminate\Http\Request;
 
 class AbteilungController extends Controller
@@ -50,21 +51,30 @@ class AbteilungController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function returnTeilnehmerName($id)
+    public function returnTeilnehmerNameBestellung($id,$bestellungid)
     {
         $data = Abteilung::where('id','=',$id)->with([                            
             'teilnehmer'
             ])->get()[0];
-            
+        $bestellungen = WochenBestellung::find($bestellungid)->spezialEssen()->get();
+        $idList = [];
+        foreach($bestellungen as $bestellung) {
+            if(!in_array($bestellung['teilnehmer_id'], $idList)) {
+                $idList[]=$bestellung['teilnehmer_id'];
+            }
+        }
         $name = $data->name;
         $abteilungTeilnehmer = $data->teilnehmer;
-        $teilnehmerName = [];
+        $teilnehmerlist = [];
         foreach( $abteilungTeilnehmer as $teilnehmer) {
-            $teilnehmer->Teilnehmer_id = $teilnehmer->id;
-            unset($teilnehmer->id);
+            if(!in_array($teilnehmer->id , $idList)) {
+                $teilnehmer->Teilnehmer_id = $teilnehmer->id;
+                unset($teilnehmer->id);
+                $teilnehmerlist[] = $teilnehmer;
+            }
         }
         return response()->json([
-            'data' => $abteilungTeilnehmer,
+            'data' => $teilnehmerlist,
             'message' => 'Alle Teilnehmer der Abteilung erfolgreich übergeben',
             'succes' => true,
         ],200);

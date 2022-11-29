@@ -79,7 +79,7 @@ Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->gro
 
     Route::get('/abteilungTeilnehmer={id}','indexExpanded');
 
-    Route::get('/abteilungTeilnehmerName={id}','returnTeilnehmerName');
+    Route::get('/abteilungTeilnehmerName/{id}/Bestellung/{bestellung}','returnTeilnehmerNameBestellung');
 });
 
 Route::middleware(['auth:sanctum'])->controller(RolleController::class)->group(function () {

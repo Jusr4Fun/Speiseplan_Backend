@@ -105,6 +105,7 @@ class WochenBestellungController extends Controller
     }
 
     public function updateOrCreateWochenBestellungSpezialBestellungen(Request $request) {
+        $daysArr =array('Montag' , 'Dienstag' , 'Mittwoch' , 'Donnerstag' , 'Freitag');
         $fields = $request->validate([
             'abteilung_id'  => 'required|int',
             'bestellungs_id'  => 'sometimes',
@@ -121,18 +122,21 @@ class WochenBestellungController extends Controller
                 foreach($fields['spezial'] as $sentBestellung) {
                     $tempBestArr = [];
                     $tempBestObj = [];
+                    $tempDayArr = [];
                     $tempBestObj['teilnehmer_id'] = $sentBestellung['Teilnehmer_id'];
                     $tempBestObj['wochen_bestellung_id'] = $fields['bestellungs_id'];
-                    $this->CheckIfEssenExistSaveIf($tempBestObj, $sentBestellung['Montag'], $tempBestArr, 1);
-                    $this->CheckIfEssenExistSaveIf($tempBestObj, $sentBestellung['Dienstag'], $tempBestArr, 2);
-                    $this->CheckIfEssenExistSaveIf($tempBestObj, $sentBestellung['Mittwoch'], $tempBestArr, 3);
-                    $this->CheckIfEssenExistSaveIf($tempBestObj, $sentBestellung['Donnerstag'], $tempBestArr, 4);
-                    $this->CheckIfEssenExistSaveIf($tempBestObj, $sentBestellung['Freitag'], $tempBestArr, 5);
+                    $tempDayArr = array_intersect( $daysArr , array_keys($sentBestellung));
+                    foreach($tempDayArr as $day) {
+                        var_dump($day);
+                        $this->CheckIfEssenExistSaveIf($tempBestObj, $sentBestellung[$day], $tempBestArr, $this->convertDayTextID($day));
+                        $tempARRR[] = $tempBestArr;
+                    }
                     $tempARRR[] = $tempBestArr;
                     $savedBestellungen = Spezial_Essen::where('wochen_bestellung_id','=',$fields['bestellungs_id'])->get();
                     foreach($tempBestArr as $bestellung) {
+                        var_dump($bestellung);
                         if(!$this->ExistsEAndChangeIfNotEqual($bestellung, $savedBestellungen)) {
-                            var_dump(Spezial_Essen::create($bestellung));
+                            Spezial_Essen::create($bestellung);
                         }
                     }
                 }
@@ -205,7 +209,24 @@ class WochenBestellungController extends Controller
         }
     }
 
-    private function CheckIfEssenExistSaveIf($obj, $bestellung, &$list, $tag_id) {
+    private function convertDayTextID($text) {
+        switch($text) {
+            case 'Montag':
+                return 1;
+            case 'Dienstag':
+                return 2;
+            case 'Mittwoch':
+                return 3;
+            case 'Donnerstag':
+                return 4;
+            case 'Freitag':
+                return 4;
+            default:
+                return null;
+        }
+    }
+
+    private function CheckIfEssenExistSaveIf(&$obj, $bestellung, &$list, $tag_id) {
         if($bestellung && ($bestellung != "")) {
             $obj['wochentag_id'] = $tag_id;
             $obj['essen_id'] = $this->convertEssenTextID($bestellung);
