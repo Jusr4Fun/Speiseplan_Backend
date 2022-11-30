@@ -10,6 +10,7 @@ use App\Http\Controllers\AbteilungController;
 use App\Http\Controllers\RolleController;
 use App\Http\Controllers\TeilnehmerController;
 use App\Http\Controllers\SupportMailController;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +85,12 @@ Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->gro
 
 Route::middleware(['auth:sanctum'])->controller(RolleController::class)->group(function () {
     Route::get('/RolleRoleID','returnRollenRoleID');
+});
+
+Route::middleware(['auth:sanctum'])->controller(ImageController::class)->group(function () {
+    Route::post('/uploadImage','uploadImage');
+
+    Route::get('/ImageWoche/{id}','getImageWoche');
 });
 
 Route::middleware(['auth:sanctum'])->controller(TeilnehmerController::class)->group(function () {
