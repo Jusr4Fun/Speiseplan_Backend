@@ -114,7 +114,6 @@ class WochenBestellungController extends Controller
             'spezial'    => 'sometimes|array',
             'woche_id'  => 'required|int',
         ]);
-        $tempARRR = [];
         if($fields['bestellungs_id']  || (count(WochenBestellung::where([['wochen_id','=',$fields['woche_id']],['abteilung_id','=',$fields['abteilung_id']]])->get()) > 0) ) {
             $data = WochenBestellung::where([['wochen_id','=',$fields['woche_id']],['abteilung_id','=',$fields['abteilung_id']]])->first();
             $this->saveHelper($data, $fields);
@@ -127,14 +126,10 @@ class WochenBestellungController extends Controller
                     $tempBestObj['wochen_bestellung_id'] = $fields['bestellungs_id'];
                     $tempDayArr = array_intersect( $daysArr , array_keys($sentBestellung));
                     foreach($tempDayArr as $day) {
-                        var_dump($day);
                         $this->CheckIfEssenExistSaveIf($tempBestObj, $sentBestellung[$day], $tempBestArr, $this->convertDayTextID($day));
-                        $tempARRR[] = $tempBestArr;
                     }
-                    $tempARRR[] = $tempBestArr;
                     $savedBestellungen = Spezial_Essen::where('wochen_bestellung_id','=',$fields['bestellungs_id'])->get();
                     foreach($tempBestArr as $bestellung) {
-                        var_dump($bestellung);
                         if(!$this->ExistsEAndChangeIfNotEqual($bestellung, $savedBestellungen)) {
                             Spezial_Essen::create($bestellung);
                         }
@@ -160,7 +155,6 @@ class WochenBestellungController extends Controller
         }; 
 
         return response()->json([
-            'data' => $tempARRR,
             'message' => 'erfolgreich',
             'succes' => true,
         ],200);

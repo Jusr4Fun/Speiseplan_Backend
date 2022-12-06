@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Mail;
-use App\Mail\SendMail;
+use App\Mail\SupportConfirmMail;
+use App\Mail\SupportRedirectMail;
 
 class SupportMailController extends Controller
 {
@@ -19,19 +20,23 @@ class SupportMailController extends Controller
      
         if(count($fields['user']) < 1) {
             $testMailData = [
-                'title' => 'Dies ist eine Support-Mail des Speiseplan Projektes',
+                'title' => 'Bestätigung der Übersendung einer Support-Anfrage',
                 'body' => $fields['details'],
-                'subject' => $fields['betreff']
+                'subject' => $fields['betreff'],
+                'email' => $fields['email'],
             ];
-            Mail::to($fields['email'])->send(new SendMail($testMailData));
+            Mail::to($fields['email'])->send(new SupportConfirmMail($testMailData));
+            Mail::to('support@fisi-hr.de')->send(new SupportRedirectMail($testMailData));
         } else {
             $testMailData = [
                 'title' => 'Dies ist eine Support-Mail des Speiseplan Projektes',
                 'body' => $fields['details'],
                 'user' => $fields['user']['name'],
-                'subject' => $fields['betreff']
+                'subject' => $fields['betreff'],
+                'email' => $fields['email'],
             ];
-            Mail::to($fields['email'])->send(new SendMail($testMailData));
+            Mail::to($fields['email'])->send(new SupportConfirmMail($testMailData));
+            Mail::to('support@fisi-hr.de')->send(new SupportRedirectMail($testMailData));
         }
     }
 
@@ -42,6 +47,6 @@ class SupportMailController extends Controller
             'body' => 'Test'
         ];
 
-        Mail::to('ddvorak@fisi-hr.de')->send(new SendMail($testMailData));
+        Mail::to('ddvorak@fisi-hr.de')->send(new SupportConfirmMail($testMailData));
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\RolleController;
 use App\Http\Controllers\TeilnehmerController;
 use App\Http\Controllers\SupportMailController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\SpezialEssenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +86,10 @@ Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->gro
 
 Route::middleware(['auth:sanctum'])->controller(RolleController::class)->group(function () {
     Route::get('/RolleRoleID','returnRollenRoleID');
+});
+
+Route::middleware(['auth:sanctum'])->controller(SpezialEssenController::class)->group(function () {
+    Route::post('/deleteSpezialEssen','deleteSpezialEssen');
 });
 
 Route::middleware(['auth:sanctum'])->controller(ImageController::class)->group(function () {
