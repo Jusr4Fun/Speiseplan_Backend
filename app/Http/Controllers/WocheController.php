@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
 use App\Models\Woche;
+use App\Models\Abteilung;
 use Illuminate\Http\Request;
 use \Datetime;
 use \DatetimeZone;
@@ -134,12 +135,14 @@ class WocheController extends Controller
             'wochenBestellungen.spezialEssen.wochentag',
             'wochenBestellungen.spezialEssen.essen'
             ])->get()[0];
-        
+        $dataAbteilungen = Abteilung::get();;
         $test = json_encode($data);
         $test = json_decode($test);
+        $abteilungenBestellt = [];
         $spezialEssenArray = [];
         $essenAnzahl = array(array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0),array(0,0,0,0,0));
         foreach( $test->wochen_bestellungen as $wochen) {
+            $abteilungenBestellt[] = $wochen->abteilung_id;
             foreach( $wochen->spezial_essen as $essen) {
                 if ( $this->istTvohanden($spezialEssenArray, $essen)) {
                 foreach( $spezialEssenArray as $teilnehmer) {
@@ -238,12 +241,40 @@ class WocheController extends Controller
                                       + $essenAnzahl[4][3],
                         ];
         $test->gesamtBestellungen = $gesamtBestellungen;
-        foreach($spezialEssenArray as $teilnehmer) {
-            $temp = $teilnehmer;
-
+        $abteilungen = [];
+        
+        foreach($dataAbteilungen as $dataAbteilung) {
+            if ($this->istAvohanden($abteilungenBestellt,$dataAbteilung)) {
+                $temp = [];
+                $temp['name'] = $dataAbteilung->name;
+                $temp['Bestellt'] = 'JA';
+                $abteilung[] = $temp;
+            } else {
+                $temp = [];
+                $temp['name'] = $dataAbteilung->name;
+                $temp['Bestellt'] = 'NEIN';
+                $abteilung[] = $temp;
+            }
+            /* //var_dump($dataAbteilung->id);
+            foreach($abteilungenBestellt as $abteilungBestellt) {
+                if ($this->istAvohanden($abteilungenBestellt,$dataAbteilung))
+            if($dataAbteilung->id == $abteilungBestellt) {
+                $temp = [];
+                $temp['name'] = $dataAbteilung->name;
+                $temp['Bestellt'] = 'JA';
+                $abteilung[] = $temp;
+            } else {
+                $temp = [];
+                $temp['name'] = $dataAbteilung->name;
+                $temp['Bestellt'] = 'NEIN';
+                $abteilung[] = $temp;
+            } */
+        
+            /* if ($abteilungBestellt)
+            $abteilungen[''] */
         }
         $test->teilnehmer = $spezialEssenArray;
-
+        $test->abteilungen = $abteilung;
         return response()->json([
             'data' => $test,
             'message' => 'Wochenbestellungen der Woche erfolgreich geladen',
@@ -304,6 +335,16 @@ class WocheController extends Controller
                     $returnValue = true;
                 }
             }
+        return $returnValue;
+    }
+
+    private function istAvohanden($bestellungAbteilungen, $abteilung) {
+        $returnValue = false;
+        foreach( $bestellungAbteilungen as $Bestellung) {
+            if ( $Bestellung == $abteilung->id) {
+                $returnValue = true;
+            }
+        }
         return $returnValue;
     }
 
