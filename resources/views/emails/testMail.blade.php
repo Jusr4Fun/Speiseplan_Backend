@@ -7,6 +7,6 @@
 <body>
     <h1>{{ $testMailData['title'] }}</h1>
     <p>{{ $testMailData['body'] }}</p>
-    <p>{{ $testMailData['user'] }}</p>
+     
 </body>
 </html>

@@ -16,7 +16,7 @@ class SupportMailController extends Controller
             'email'    => 'required|email',
             'user' => 'sometimes',
         ]);
-        
+     
         if(count($fields['user']) < 1) {
             $testMailData = [
                 'title' => 'Dies ist eine Support-Mail des Speiseplan Projektes',
