@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        /* Schema::table('users', function($table) {
-            $table->foreign('role_id')->references('id')->on('rollen');
-        }); */
+        Schema::table('wochen', function($table) {
+            $table->string('wochenanfang');
+            $table->string('wochenende');
+        });
     }
 
     /**

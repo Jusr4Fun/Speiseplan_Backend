@@ -60,7 +60,7 @@ class SpezialEssenController extends Controller
             case 'Donnerstag':
                 return 4;
             case 'Freitag':
-                return 4;
+                return 5;
             default:
                 return null;
         }
