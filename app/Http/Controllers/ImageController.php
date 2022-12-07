@@ -42,18 +42,14 @@ class ImageController extends Controller
     public function getImageWoche($id) {
         if (count(Speiseplan_File::where('wochen_id','=',$id)->get()) > 0){
             $loadedFile = Speiseplan_File::where('wochen_id','=',$id)->get()[0];
-            $header = [];
-            $header['Content-Type'] = 'image/jpeg'; 
-            $header['Content-Disposition'] = 'form-data; name="image"; filename='.$loadedFile->file_name;
             $file = Storage::disk('img')->get($loadedFile->file_name);
             $filepath = Storage::disk('img')->path($loadedFile->file_name);
             return response()->file($filepath);
         }
         else {
-            return response()->json([
-                'message' => 'Bild erfolgreich Hochgeladen',
-                'succes' => true,
-            ],200);
+            $file = Storage::disk('img')->get('Platzhalter.jpg');
+            $filepath = Storage::disk('img')->path('Platzhalter.jpg');
+            return response()->file($filepath);
         }
     }
 }

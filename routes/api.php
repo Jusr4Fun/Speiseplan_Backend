@@ -33,29 +33,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->controller(UsersController::class)->group(function () {
-    Route::get('/users','index');
+    Route::get('/users','returnAllUsers');
 
-    Route::get('/user={id}','show');
+    Route::delete('/deleteUser/{id}','deleteUser');
 
-    Route::delete('/deleteUser={id}','destroy');
+    Route::post('/storeUser','storeUser');
 
-    Route::post('/storeUsers','store');
-
-    Route::post('/updateUser','update');
+    Route::post('/updateUser','updateUser');
 
     Route::post('/updatePasswort' , 'updatePasswort');
 });
 
 Route::middleware(['auth:sanctum'])->controller(WocheController::class)->group(function() {
-    Route::get('/wochen', 'index');
+    Route::get('/woche/{id}','returnSpezifischeWoche');
 
-    Route::post('/wochen','store');
-
-    Route::get('/woche={id}','show');
-
-    Route::get('/wochen={id}=Bestellungen', 'returnWochenBestellungen');
-
-    Route::get('/wochen={id}=SpezialEssen', 'returnSpezialEssen');
+    Route::get('/wochen/{id}/SpezialEssen', 'returnSpezialEssen');
 
     Route::post('/aktuelleWoche', 'returnAktuelleWoche');
 
@@ -63,23 +55,15 @@ Route::middleware(['auth:sanctum'])->controller(WocheController::class)->group(f
 });
 
 Route::middleware(['auth:sanctum'])->controller(WochenBestellungController::class)->group(function() {
-    Route::get('/wochenBestellungen', 'index');
-
-    Route::get('/wochenBestellungen={id}=SpezialEssen', 'returnSpezialEssen');
-
     Route::post('/updateOrCreateWochenBestellung', 'updateOrCreateWochenBestellungSpezialBestellungen');
 });
 
 Route::middleware(['auth:sanctum'])->controller(AbteilungController::class)->group(function() {
-    Route::get('/abteilungen', 'index');
-
-    Route::post('/abteilung','store');
-
-    Route::get('/abteilung={id}','show');
+    Route::get('/abteilungen', 'returnAlleAbteilungen');
 
     Route::get('/abteilung/{abteilung}/woche/{woche}','returnBestellungenWocheAbteilung');
 
-    Route::get('/abteilungTeilnehmer={id}','indexExpanded');
+    Route::get('/abteilungTeilnehmer/{id}','returnTeilnehmerAbteilung');
 
     Route::get('/abteilungTeilnehmerName/{id}/Bestellung/{bestellung}','returnTeilnehmerNameBestellung');
 });
@@ -99,13 +83,13 @@ Route::middleware(['auth:sanctum'])->controller(ImageController::class)->group(f
 });
 
 Route::middleware(['auth:sanctum'])->controller(TeilnehmerController::class)->group(function () {
-    Route::delete('/deleteTeilnehmer={id}','destroy');
+    Route::delete('/deleteTeilnehmer/{id}','deleteTeilnehmer');
 
-    Route::post('/updateTeilnehmer','update');
+    Route::post('/updateTeilnehmer','updateTeilnehmer');
 
-    Route::post('/storeTeilnehmer','store');
+    Route::post('/storeTeilnehmer','storeTeilnehmer');
 });
 
 Route::controller(SupportMailController::class)->group(function () {
-    Route::post('/SupportMail','Support');
+    Route::post('/SupportMail','SupportMail');
 });

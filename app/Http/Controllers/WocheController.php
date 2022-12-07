@@ -11,62 +11,7 @@ use \DatetimeZone;
 
 class WocheController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $wochen=Woche::get();
-        return response()->json([
-            'data' => $wochen,
-            'message' => 'Alle Wochen erfolgreich übergeben',
-            'succes' => true,
-        ],200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $fields = $request->validate([
-            'name' => 'required|string|min:10|max:255',
-        ]);
-
-        $data = [
-            'name' => $fields['name'],
-        ];
-
-        $woche = Woche::create($data);
-
-        return response()->json([
-            'data' => $woche,
-            'message' => 'Neue Woche wurde erfolgreich gespeichert',
-            'succes' => true,
-        ],201);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Woche  $woche
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function returnSpezifischeWoche($id)
     {
         $woche=Woche::find($id);
         return response()->json([
@@ -74,59 +19,7 @@ class WocheController extends Controller
             'message' => 'Einzelne Woche erfolgreich geladen',
             'succes' => true,
         ],200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Woche  $woche
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Woche $woche)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Woche  $woche
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Woche $woche)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Woche  $woche
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Woche $woche)
-    {
-        //
-    }
-
-    /**
-     * Übergibt alle Wochenbestellungen der spezifizierten ID
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function returnWochenBestellungen($id) {
-        $data = Woche::where('id','=',$id)->with([                            
-            'wochenBestellungen'
-            ])->get()[0];
-
-        return response()->json([
-                'data' => $data,
-                'message' => 'Wochenbestellungen der Woche erfolgreich geladen',
-                'succes' => true,
-        ],200);
-    }
-    
+    }  
 
     public function returnSpezialEssen($id)
     {
@@ -162,7 +55,6 @@ class WocheController extends Controller
                     $tempobj->Freitag = '';
                     $tempobj->Teilnehmer_id = $essen->teilnehmer->id;
                     $temp = $essen->wochentag->name;
-                    //$tempobj->essen[$essen->wochentag->name] = $essen->essen->bezeichnung;
                     $tempobj->$temp = $essen->essen->bezeichnung;
                     $spezialEssenArray[] = $tempobj;
                 }
@@ -255,23 +147,6 @@ class WocheController extends Controller
                 $temp['Bestellt'] = 'NEIN';
                 $abteilung[] = $temp;
             }
-            /* //var_dump($dataAbteilung->id);
-            foreach($abteilungenBestellt as $abteilungBestellt) {
-                if ($this->istAvohanden($abteilungenBestellt,$dataAbteilung))
-            if($dataAbteilung->id == $abteilungBestellt) {
-                $temp = [];
-                $temp['name'] = $dataAbteilung->name;
-                $temp['Bestellt'] = 'JA';
-                $abteilung[] = $temp;
-            } else {
-                $temp = [];
-                $temp['name'] = $dataAbteilung->name;
-                $temp['Bestellt'] = 'NEIN';
-                $abteilung[] = $temp;
-            } */
-        
-            /* if ($abteilungBestellt)
-            $abteilungen[''] */
         }
         $test->teilnehmer = $spezialEssenArray;
         $test->abteilungen = $abteilung;
@@ -292,7 +167,6 @@ class WocheController extends Controller
         $timezoneOffset = $fields['offset'];
         $time = $fields['time'];
         $time = $time /1000 - $timezoneOffset *60;
-        //$time = $time + (3600*24*7);
 
         $date = date("Y-m-d H:i:s", $time);
         $temp = 'KW ' . date("W o", $time);

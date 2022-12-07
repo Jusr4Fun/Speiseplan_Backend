@@ -9,7 +9,7 @@ use App\Mail\SupportRedirectMail;
 
 class SupportMailController extends Controller
 {
-    public function Support(Request $request)
+    public function SupportMail(Request $request)
     {
         $fields = $request->validate([
             'details'  => 'required',

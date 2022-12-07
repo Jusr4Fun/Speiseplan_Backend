@@ -8,14 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
+        //\App\Models\User::factory(10)->create();
 
         /* $date = date_create('2022-01-01');
         for($i=0; $i < 10000; $i++) 
@@ -27,7 +22,7 @@ class DatabaseSeeder extends Seeder
             ]);
             $date->modify('+7 day');
         } */
-        $date = date_create('2021-12-27');
+        /* $date = date_create('2021-12-27');
         for($i=0; $i < 10000; $i++) 
         {
             $kw = date("W o", $date->getTimestamp());
@@ -41,7 +36,7 @@ class DatabaseSeeder extends Seeder
                 'wochenende' => $temp3, 
             ]);
             $date->modify('+3 day');
-        } 
+        }  */
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

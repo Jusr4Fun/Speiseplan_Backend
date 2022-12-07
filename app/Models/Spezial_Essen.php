@@ -9,11 +9,6 @@ class Spezial_Essen extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'essen_id',
         'teilnehmer_id',

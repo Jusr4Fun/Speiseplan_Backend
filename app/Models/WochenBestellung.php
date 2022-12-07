@@ -8,12 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WochenBestellung extends Model
 {
     use HasFactory;
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+
     protected $fillable = [
         'wochen_id',
         'abteilung_id',

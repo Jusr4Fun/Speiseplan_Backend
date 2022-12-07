@@ -13,21 +13,11 @@ class SupportConfirmMail extends Mailable
 
     public $testMailData;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct($testMailData)
     {
         $this->testMailData = $testMailData;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->subject('Bestätigung Support-Anfrage')

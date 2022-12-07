@@ -13,21 +13,11 @@ class SupportRedirectMail extends Mailable
 
     public $testMailData;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct($testMailData)
     {
         $this->testMailData = $testMailData;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->subject('Support-Anfrage Speiseplan von '.$this->testMailData['email'])
