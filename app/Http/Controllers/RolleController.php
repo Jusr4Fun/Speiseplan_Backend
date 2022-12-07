@@ -7,14 +7,6 @@ use App\Models\Rolle;
 
 class RolleController extends Controller
 {
-    public function index()
-    {
-        return response()->json([
-            'message' => 'Rollen erfolgreich geladen',
-            'succes' => true,
-        ],200);
-    }
-
     public function returnRollenRoleID() 
     {
         $data=Rolle::get();

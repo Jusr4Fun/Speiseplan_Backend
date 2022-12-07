@@ -39,14 +39,4 @@ class SupportMailController extends Controller
             Mail::to('support@fisi-hr.de')->send(new SupportRedirectMail($testMailData));
         }
     }
-
-    public function SupportAuth()
-    {
-        $testMailData = [
-            'title' => 'Dies ist eine Test-Mail des Speiseplan Projektes',
-            'body' => 'Test'
-        ];
-
-        Mail::to('ddvorak@fisi-hr.de')->send(new SupportConfirmMail($testMailData));
-    }
 }
