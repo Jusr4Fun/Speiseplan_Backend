@@ -49,7 +49,7 @@ class ImageController extends Controller
         else {
             $file = Storage::disk('img')->get('Platzhalter.jpg');
             $filepath = Storage::disk('img')->path('Platzhalter.jpg');
-            return response()->file($filepath);
+            return response()->file($filepath)->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         }
     }
 }
