@@ -34,7 +34,6 @@ class WochenBestellungController extends Controller
                     }
                     $savedBestellungen = Spezial_Essen::where('wochen_bestellung_id','=',$fields['bestellungs_id'])->get();
                     foreach($tempBestArr as $bestellung) {
-                        var_dump($bestellung);
                         if ($bestellung['essen_id']) {
                             if(!$this->ExistsEAndChangeIfNotEqual($bestellung, $savedBestellungen)) {
                                 Spezial_Essen::create($bestellung);
