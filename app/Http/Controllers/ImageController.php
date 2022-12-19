@@ -44,12 +44,12 @@ class ImageController extends Controller
             $loadedFile = Speiseplan_File::where('wochen_id','=',$id)->get()[0];
             $file = Storage::disk('img')->get($loadedFile->file_name);
             $filepath = Storage::disk('img')->path($loadedFile->file_name);
-            return response()->file($filepath)->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+            return response()->file($filepath);
         }
         else {
             $file = Storage::disk('img')->get('Platzhalter.jpg');
             $filepath = Storage::disk('img')->path('Platzhalter.jpg');
-            return response()->file($filepath)->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+            return response()->file($filepath);
         }
     }
 }
